@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Mail, Github, Linkedin, Instagram, Phone, Bolt, Cpu, Terminal, MapPin, Upload, FileText, Trash2, Check, AlertCircle, ArrowRight, Download, ChevronRight } from 'lucide-react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// In production (Vercel), both frontend & backend are on the same domain,
+// so API_URL is '' (empty = relative URLs like /api/contact).
+// In local dev, VITE_API_URL=http://localhost:5000 is set in frontend/.env
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 const App = () => {
   const [activeSection, setActiveSection] = useState('home');

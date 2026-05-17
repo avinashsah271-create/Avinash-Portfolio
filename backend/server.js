@@ -29,24 +29,16 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
 
-// Create uploads directory if it doesn't exist
-if (!fs.existsSync('uploads')) {
-    fs.mkdirSync('uploads');
-}
-if (!fs.existsSync('uploads/certificates')) {
-    fs.mkdirSync('uploads/certificates', { recursive: true });
-}
-if (!fs.existsSync('uploads/documents')) {
-    fs.mkdirSync('uploads/documents', { recursive: true });
-}
-if (!fs.existsSync('uploads/projects')) {
-    fs.mkdirSync('uploads/projects', { recursive: true });
-}
-if (!fs.existsSync('uploads/profile')) {
-    fs.mkdirSync('uploads/profile', { recursive: true });
-}
+// On Vercel serverless, use /tmp for writable storage; locally use ./uploads
+const UPLOAD_BASE = process.env.VERCEL ? '/tmp/uploads' : 'uploads';
+app.use('/uploads', express.static(UPLOAD_BASE));
+
+// Create upload directories
+[UPLOAD_BASE, `${UPLOAD_BASE}/certificates`, `${UPLOAD_BASE}/documents`, `${UPLOAD_BASE}/projects`, `${UPLOAD_BASE}/profile`]
+    .forEach(dir => { if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }); });
+
+
 
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/portfolio';
@@ -100,14 +92,12 @@ app.get('/api/auth/check', verifyToken, (req, res) => {
 });
 
 
-// Multer Configuration
+// Multer Configuration — uses /tmp on Vercel, ./uploads locally
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const type = req.body.type || 'documents';
-        const dir = path.join('uploads', type);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
+        const dir = path.join(UPLOAD_BASE, type);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
         cb(null, dir);
     },
     filename: (req, file, cb) => {
@@ -356,6 +346,11 @@ app.use((err, req, res, next) => {
     res.status(500).json({ success: false, message: 'Server error.' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Only start HTTP server in local dev — on Vercel, app is exported as a serverless function
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
+
+module.exports = app;
