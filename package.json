@@ -1,8 +1,9 @@
 {
   "name": "avinash-portfolio",
   "version": "1.0.0",
-  "description": "Avinash Sah Portfolio — Full Stack",
+  "description": "Avinash Sah Portfolio — Full Stack (Vercel)",
   "type": "commonjs",
+  "engines": { "node": ">=18.0.0" },
   "scripts": {
     "build": "cd frontend && npm install && npm run build",
     "start": "node backend/server.js"
