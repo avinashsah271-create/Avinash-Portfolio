@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-color: #030305;
+    --card-bg: rgba(20, 20, 25, 0.4);
+    --primary: #00e5ff;
+    --secondary: #2f00ff;
+    --accent: #00ff88;
+    --text-main: #f0f0f5;
+    --text-dim: #8b8b99;
+    --glass-border: rgba(255, 255, 255, 0.05);
+  }
+
+  body {
+    @apply bg-[#030305] text-[#f0f0f5] selection:bg-[#00e5ff] selection:text-black;
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-[rgba(20,20,25,0.4)] backdrop-blur-xl border border-[rgba(255,255,255,0.06)] rounded-3xl transition-all duration-500 hover:bg-[rgba(30,30,35,0.6)] hover:border-[rgba(255,255,255,0.1)];
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  .bento-card {
+    @apply bg-gradient-to-br from-[rgba(255,255,255,0.03)] to-[rgba(255,255,255,0.01)] backdrop-blur-2xl border border-[rgba(255,255,255,0.05)] rounded-[2rem] overflow-hidden transition-all duration-500;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#ffffff] via-[#e0e0e0] to-[#8b8b99];
+  }
+  
+  .gradient-text-accent {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#00e5ff] to-[#00ff88];
+  }
+
+  .nav-pill {
+    @apply relative text-sm font-medium text-[#8b8b99] px-5 py-2.5 rounded-full transition-all duration-300 hover:text-white hover:bg-[rgba(255,255,255,0.05)];
+  }
+
+  .nav-pill.active {
+    @apply text-white bg-[rgba(255,255,255,0.1)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)];
+  }
+}
+
+/* --- Premium Abstract Background --- */
+.ambient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-color: #030305;
+  overflow: hidden;
+}
+
+.ambient-bg::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.08) 0%, transparent 60%);
+  filter: blur(100px);
+}
+
+.ambient-bg::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 70vw;
+  height: 70vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(47, 0, 255, 0.08) 0%, transparent 60%);
+  filter: blur(120px);
+}
+
+/* Mesh Grid overlay for texture */
+.mesh-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+  opacity: 0.5;
+  pointer-events: none;
+}

@@ -1,0 +1,17 @@
+# Root-level ignores
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# Env files — NEVER commit these
+.env
+.env.local
+.env.production
+
+# Build outputs
+dist/
+build/
+
+# Uploaded files (runtime, not source)
+backend/uploads/
